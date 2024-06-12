@@ -7,8 +7,8 @@ class HomeProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 48,
-      margin: const EdgeInsets.symmetric(horizontal : 24, vertical: 12),
+      height: MediaQuery.of(context).size.height * 0.06,
+      margin: const EdgeInsets.symmetric(horizontal: 24),
       width: double.infinity,
       child: const Row(
         children: [

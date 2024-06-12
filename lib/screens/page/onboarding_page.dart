@@ -153,7 +153,7 @@ class OnBoardingCarouselActionBottom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 35),
+        margin: const EdgeInsets.symmetric(horizontal: 20),
         child: currentIndex == 2 ? _buttonGetStarted(context) : _actionButtonNext(context));
   }
 
@@ -174,7 +174,7 @@ class OnBoardingCarouselActionBottom extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8)),
               backgroundColor: DColors.blue),
           child: Text(
-            'Ayo Tuku',
+            'Get Started',
             style: DTextStyle.setStyle(
                 color: Colors.white, fontWeight: DFontWeight.semiBold),
           )),
@@ -187,9 +187,9 @@ class OnBoardingCarouselActionBottom extends StatelessWidget {
       child: TextButton(
           onPressed: () => navigateAndRemoveNamed(context, 'dashboard'),
           child: Text(
-            'Enggak Sek',
+            'Skip',
             style: DTextStyle.setStyle(
-                fontWeight: DFontWeight.semiBold, color: DColors.blue),
+                fontWeight: DFontWeight.reguler, color: DColors.blue, size: DTextSizes.small),
           )),
     );
   }
@@ -210,7 +210,7 @@ class OnBoardingCarouselActionBottom extends StatelessWidget {
               alignment: Alignment.center,
               color: Colors.white,
               onPressed: onPressed,
-              icon: const Icon(Icons.keyboard_double_arrow_right))),
+              icon: const Icon(Icons.arrow_right_alt_rounded))),
     );
   }
 }
