@@ -30,11 +30,32 @@ class _CartSummaryState extends State<CartSummary> {
     try {
       var result = await BarcodeScanner.scan();
       if (result.rawContent.isNotEmpty) {
-        print(result.rawContent); // Trigger navigation to CartScreen with barcode
+        addItem(CartData(
+          title: 'Produk Ebud Jaya Sentosa',
+          amount: 10000,
+          quantity: 1,
+        )); // Trigger navigation to CartScreen with barcode
       }
     } catch (e) {
       // Handle error if needed
     }
+  }
+
+  List<CartData> cartItemsFuture = [];
+  @override
+  void initState() {
+    super.initState();
+    fetchCartItems().then((items) {
+      setState(() {
+        cartItemsFuture = items;
+      });
+    });
+  }
+
+  void addItem(CartData newItem) {
+    setState(() {
+      cartItemsFuture.add(newItem);
+    });
   }
 
   @override
@@ -42,16 +63,16 @@ class _CartSummaryState extends State<CartSummary> {
     bool existItem = true;
     return Container(
       width: MediaQuery.of(context).size.width,
-      padding: const EdgeInsets.all(10),
-      // margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             width: 100,
             margin: const EdgeInsets.only(bottom: 20),
+            alignment: Alignment.center,
             child: LinearProgressIndicator(
-              minHeight: 5,
+              minHeight: 3,
               borderRadius: BorderRadius.circular(50),
               value: 1,
               valueColor: const AlwaysStoppedAnimation(DColors.black),
@@ -59,50 +80,35 @@ class _CartSummaryState extends State<CartSummary> {
             ),
           ),
 
-          Container(
-            height: MediaQuery.of(context).size.height * (existItem ? 0.4 : 0.0),
-            child: ListView(children: [
-              CartItem(
-                  title: 'Malboro',
-                  amount: 12000,
-                  quantity: 1,
-                  onUpdate: _calculateTotal),
-              Divider(),
-              CartItem(
-                  title: 'Surya',
-                  amount: 12000,
-                  quantity: 2,
-                  onUpdate: _calculateTotal),
-              Divider(),
-              CartItem(
-                  title: 'Sampoerna',
-                  amount: 12000,
-                  quantity: 1,
-                  onUpdate: _calculateTotal),
-              Divider(),
-              CartItem(
-                  title: 'Sampoerna',
-                  amount: 12000,
-                  quantity: 4,
-                  onUpdate: _calculateTotal),
-              Divider(),
-              CartItem(
-                  title: 'Sampoerna',
-                  amount: 12000,
-                  quantity: 5,
-                  onUpdate: _calculateTotal),
-            ]),
-          ),
+          cartItemsFuture.isEmpty
+              ? const Center(child: LinearProgressIndicator())
+              : SizedBox(
+                  height: MediaQuery.of(context).size.height *
+                      (existItem ? 0.4 : 0.0),
+                  child: ListView.separated(
+                    itemCount: cartItemsFuture.length,
+                    itemBuilder: (context, index) {
+                      var item = cartItemsFuture[index];
+                      return CartItem(
+                        title: item.title,
+                        amount: item.amount,
+                        quantity: item.quantity,
+                        onUpdate: _calculateTotal,
+                      );
+                    },
+                    separatorBuilder: (context, index) => const Divider(),
+                  ),
+                ),
           CartBilingInformationItem(
             total: _total,
           ),
-           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CartActionButton(
                 title: 'Scan',
                 icon: Icons.qr_code_scanner_rounded,
-                onTap: () => _scanBarcode,
+                onTap: _scanBarcode,
               ),
               CartActionButton(
                 title: 'Check Out',
@@ -131,7 +137,7 @@ class CartBilingInformationItem extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(top: 20),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
             width: MediaQuery.of(context).size.width * 0.4,
@@ -172,32 +178,35 @@ class CartActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(top: 20),
-      height: 40,
-      width: MediaQuery.of(context).size.width * 0.4,
-      decoration: BoxDecoration(
-          shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.circular(12),
-          color: DColors.blue),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(
-            icon,
-            color: Colors.white,
-            size: 20,
-          ),
-          const SizedBox(width: 10),
-          Text(
-            title,
-            style: DTextStyle.setStyle(
-                size: DTextSizes.normal,
-                fontWeight: DFontWeight.medium,
-                color: Colors.white),
-          ),
-        ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(top: 20),
+        height: 40,
+        width: MediaQuery.of(context).size.width * 0.4,
+        decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.circular(12),
+            color: DColors.blue),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              color: Colors.white,
+              size: 20,
+            ),
+            const SizedBox(width: 10),
+            Text(
+              title,
+              style: DTextStyle.setStyle(
+                  size: DTextSizes.normal,
+                  fontWeight: DFontWeight.medium,
+                  color: Colors.white),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -263,20 +272,45 @@ class _CartItemState extends State<CartItem> {
     return Container(
       margin: const EdgeInsets.only(bottom: 4),
       height: 60,
+      width: MediaQuery.of(context).size.width * 1,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const ActionIconButton(
-            icon: Icons.abc_rounded,
-            iconSize: 24,
-            cardSize: 48,
-            radius: 48,
-            cardColor: DColors.blue,
+          // const ActionIconButton(
+          //   icon: Icons.abc_rounded,
+          //   iconSize: 24,
+          //   cardSize: 48,
+          //   radius: 48,
+          //   cardColor: DColors.blue,
+          // ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  child: Text(
+                    widget.title,
+                    maxLines: 2,
+                    overflow: TextOverflow.clip,
+                    softWrap: true,
+                    textAlign: TextAlign.left,
+                    style: DTextStyle.setStyle(
+                        fontWeight: DFontWeight.medium, size: DTextSizes.small),
+                  )),
+              SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  child: Text(
+                    Money.idr.format(_subtotal),
+                    maxLines: 2,
+                    overflow: TextOverflow.clip,
+                    softWrap: true,
+                    textAlign: TextAlign.left,
+                    style: DTextStyle.setStyle(
+                        fontWeight: DFontWeight.light,
+                        size: DTextSizes.extraSmall),
+                  )),
+            ],
           ),
-          GroupedTitle(
-            title: widget.title,
-            subtitle: Money.idr.format(_subtotal),
-          ),
-          const Spacer(),
           Center(
             child: Column(
               children: [
@@ -314,10 +348,14 @@ class CartItemActionButton extends StatelessWidget {
           icon: Icons.remove,
           onTap: onSubtract,
         ),
-        Text(
-          quantity.toString(),
-          style: DTextStyle.setStyle(
-              fontWeight: DFontWeight.reguler, size: DTextSizes.small),
+        Container(
+          width: MediaQuery.of(context).size.width * 0.09,
+          alignment: Alignment.center,
+          child: Text(
+            quantity.toString(),
+            style: DTextStyle.setStyle(
+                fontWeight: DFontWeight.reguler, size: DTextSizes.small),
+          ),
         ),
         CartButton(
           icon: Icons.add,
@@ -343,8 +381,9 @@ class CartButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-        height: 32,
+        margin: const EdgeInsets.symmetric(horizontal: 7, vertical: 14),
+        height: MediaQuery.of(context).size.width * 0.07,
+        width: MediaQuery.of(context).size.width * 0.06,
         decoration: BoxDecoration(shape: BoxShape.circle, color: DColors.blue),
         child: Icon(
           icon,
@@ -354,4 +393,23 @@ class CartButton extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<List<CartData>> fetchCartItems() async {
+    await Future.delayed(Duration(seconds: 2)); // Simulasi delay API
+    return [
+      CartData(title: 'Radiant Armor PQ4543 Mitsubisi Toyota 5000 cc', amount: 12000, quantity: 1),
+      CartData(title: 'Surya', amount: 12000, quantity: 2),
+      CartData(title: 'Sampoerna Mild isi 16', amount: 12000, quantity: 1),
+      CartData(title: 'Sampoerna', amount: 12000, quantity: 4),
+      CartData(title: 'Sampoerna', amount: 12000, quantity: 5),
+    ];
+  }
+
+class CartData {
+  final String title;
+  final int amount;
+  final int quantity;
+
+  CartData({required this.title, required this.amount, required this.quantity});
 }
