@@ -1,8 +1,8 @@
 import 'package:cashier_app_ui/config/theme.dart';
-import 'package:cashier_app_ui/screens/page/dashboard/dashboard.dart';
-import 'package:cashier_app_ui/screens/page/onboarding_page.dart';
+import 'package:cashier_app_ui/ui/pages/dashboard/dashboard.dart';
 import 'package:cashier_app_ui/screens/page/splash_screen.dart';
 import 'package:cashier_app_ui/screens/ui/carts/summary.dart';
+import 'package:cashier_app_ui/ui/pages/onboarding_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {

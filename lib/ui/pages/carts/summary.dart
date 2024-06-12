@@ -1,12 +1,7 @@
 import 'package:barcode_scan2/barcode_scan2.dart';
-import 'package:cashier_app_ui/component/buttons/icon_button.dart';
-import 'package:cashier_app_ui/component/texts/group_title.dart';
-import 'package:cashier_app_ui/config/preferences.dart';
 import 'package:cashier_app_ui/config/theme.dart';
 import 'package:cashier_app_ui/helpers/currency.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class CartSummary extends StatefulWidget {
   final String barcode;
@@ -396,15 +391,18 @@ class CartButton extends StatelessWidget {
 }
 
 Future<List<CartData>> fetchCartItems() async {
-    await Future.delayed(Duration(seconds: 2)); // Simulasi delay API
-    return [
-      CartData(title: 'Radiant Armor PQ4543 Mitsubisi Toyota 5000 cc', amount: 12000, quantity: 1),
-      CartData(title: 'Surya', amount: 12000, quantity: 2),
-      CartData(title: 'Sampoerna Mild isi 16', amount: 12000, quantity: 1),
-      CartData(title: 'Sampoerna', amount: 12000, quantity: 4),
-      CartData(title: 'Sampoerna', amount: 12000, quantity: 5),
-    ];
-  }
+  await Future.delayed(Duration(seconds: 2)); // Simulasi delay API
+  return [
+    CartData(
+        title: 'Radiant Armor PQ4543 Mitsubisi Toyota 5000 cc',
+        amount: 12000,
+        quantity: 1),
+    CartData(title: 'Surya', amount: 12000, quantity: 2),
+    CartData(title: 'Sampoerna Mild isi 16', amount: 12000, quantity: 1),
+    CartData(title: 'Sampoerna', amount: 12000, quantity: 4),
+    CartData(title: 'Sampoerna', amount: 12000, quantity: 5),
+  ];
+}
 
 class CartData {
   final String title;

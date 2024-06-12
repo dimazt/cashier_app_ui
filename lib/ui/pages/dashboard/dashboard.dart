@@ -1,7 +1,7 @@
 import 'package:cashier_app_ui/screens/ui/dashboard/bottom_navbar.dart';
-import 'package:cashier_app_ui/screens/ui/dashboard/floating_barcode_button.dart';
+import 'package:cashier_app_ui/ui/pages/dashboard/floating_barcode_button.dart';
+import 'package:cashier_app_ui/ui/pages/home/home_page.dart';
 import 'package:flutter/material.dart';
-import 'home_page.dart';
 import 'checkout.dart';
 
 class DashboardPage extends StatefulWidget {

@@ -1,8 +1,8 @@
 import 'package:cashier_app_ui/component/section_title.dart';
-import 'package:cashier_app_ui/screens/ui/home/last_transaction.dart';
 import 'package:cashier_app_ui/screens/ui/home/profile.dart';
-import 'package:cashier_app_ui/screens/ui/home/services.dart';
-import 'package:cashier_app_ui/screens/ui/home/summary.dart';
+import 'package:cashier_app_ui/ui/pages/home/last_transaction.dart';
+import 'package:cashier_app_ui/ui/pages/home/services.dart';
+import 'package:cashier_app_ui/ui/pages/home/summary.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {

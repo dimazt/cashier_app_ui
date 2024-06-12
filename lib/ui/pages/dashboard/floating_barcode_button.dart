@@ -1,6 +1,6 @@
 import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:cashier_app_ui/config/theme.dart';
-import 'package:cashier_app_ui/screens/ui/carts/summary.dart';
+import 'package:cashier_app_ui/ui/pages/carts/summary.dart';
 import 'package:flutter/material.dart';
 
 class DashboardScanBarcodes extends StatefulWidget {
